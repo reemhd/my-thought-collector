@@ -1,29 +1,12 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState} from "react";
 import Link from "next/link";
 import { posts } from "@/app/lib/posts";
 import { tags } from "@/app/lib/tags";
 
 export default function Tags() {
   const [activeTag, setActiveTag] = useState("all");
-  const tagContainerRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        tagContainerRef.current &&
-        !tagContainerRef.current.contains(event.target as Node)
-      ) {
-        setActiveTag("all");
-      }
-    };
-
-    document.addEventListener("click", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
 
   const filteredPosts =
     activeTag === "all"
@@ -44,7 +27,7 @@ export default function Tags() {
   return (
     <section>
       <div className="my-8">
-        <div ref={tagContainerRef} className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-4">
           {tags.map((tag) => (
             <button
               key={tag}
@@ -67,9 +50,9 @@ export default function Tags() {
               <Link
                 key={post.id}
                 href={`/posts/${post.slug}`}
-                className="w-full flex flex-col md:flex-row space-x-0 md:space-x-2"
+                className="w-full flex flex-col md:flex-row space-x-0 md:space-x-1"
               >
-                <span className="text-neutral-600 w-[100px] tabular-nums">
+                <span className="text-neutral-600 w-[120px]">
                   {post.created_at}
                 </span>
                 <span className="text-neutral-300 tracking-tight  hover:text-orange-400 transition">

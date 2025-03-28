@@ -8,7 +8,7 @@ import Link from "next/link";
 export default function Navbar() {
   const [hovered, setHovered] = useState(false);
   return (
-    <aside className="mb-12 tracking-tight">
+    <aside className="mb-6 tracking-tight">
       <div className="lg:sticky lg:top-20">
         <nav
           className="flex flex-row items-center relative px-0 pb-0 fade md:overflow-auto scroll-pr-6 md:relative"
