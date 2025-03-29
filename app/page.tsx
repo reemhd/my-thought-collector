@@ -1,12 +1,12 @@
-import Image from "next/image";
 import About from "./components/about";
 import Tags from "./components/tags";
+import { posts } from "@/app/lib/posts";
 
 export default function Home() {
   return (
     <section>
       <About />
-      <Tags />
+      <Tags posts={posts} />
     </section>
   );
 }

@@ -1,11 +1,15 @@
 "use client";
 
-import { useState} from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { posts } from "@/app/lib/posts";
 import { tags } from "@/app/lib/tags";
+import type { Post } from "@/app/lib/posts";
 
-export default function Tags() {
+type Props = {
+  posts: Post[];
+};
+
+export default function Tags({ posts }: Props) {
   const [activeTag, setActiveTag] = useState("all");
 
   const filteredPosts =
@@ -26,7 +30,7 @@ export default function Tags() {
 
   return (
     <section>
-      <div className="my-8">
+      <div className="my-2">
         <div className="flex flex-wrap gap-4">
           {tags.map((tag) => (
             <button
