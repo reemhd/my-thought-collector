@@ -1,15 +1,12 @@
-// replace with get call
-
 export type Post = {
   id: number;
-  title: string;
-  content: string;
-  slug: string;
   created_at: string;
+  title: string;
   tags: string[];
+  slug: string;
 };
 
-const slugify = (str: string): string =>
+const slugify = (str: string) =>
   str
     .toLowerCase()
     .trim()
@@ -25,26 +22,26 @@ const rawPosts = [
     created_at: "2 April 2024",
     title: "AWS Series",
     tags: ["infrastructure"],
-    content: "..",
   },
   {
     id: 2,
     created_at: "12 May 2024",
-    title: "Working with Go for the First Time",
+    title: "Working with Go",
     tags: ["programming"],
-    content: "..",
   },
   {
     id: 3,
     created_at: "1 Feb 2025",
-    title: "How I Debugged a Production Nightmare",
+    title: "Debugging Production Nightmare",
     tags: ["thoughts"],
-    content: "..",
   },
 ];
 
-// Now map and inject the slug
-export const posts: Post[] = rawPosts.map((post) => ({
-  ...post,
-  slug: slugify(post.title),
-}));
+export const posts: Post[] = rawPosts.map((post) => {
+  const slug = slugify(post.title);
+
+  return {
+    ...post,
+    slug,
+  };
+});

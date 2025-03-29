@@ -1,22 +1,22 @@
-import { posts } from "@/app/lib/posts";
 import { notFound } from "next/navigation";
+import { posts } from "@/app/lib/posts";
 
-export default async function PostPage(props: {
+export default async function Page(props: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await props.params;
-
-  const post = posts.find((p) => p.slug === slug);
-
-  if (!post) return notFound();
+  const { default: Post } = await import(`@/app/content/${slug}.mdx`);
+  if (!Post) return notFound();
 
   return (
-    <div className="max-w-2xl mx-auto py-12">
-      <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
-      <p className="text-sm text-neutral-500 mb-8">{post.created_at}</p>
-      <div className="prose prose-invert">
-        <p>{post.content}</p>
-      </div>
-    </div>
+    <article className="prose prose-invert text-gray-300 mt-4">
+      <Post />
+    </article>
   );
 }
+
+export function generateStaticParams() {
+  return posts.map((p) => ({ slug: p.slug }));
+}
+
+export const dynamicParams = false;
