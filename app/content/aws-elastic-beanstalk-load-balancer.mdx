@@ -1,0 +1,61 @@
+# AWS Elastic Beanstalk Load Balancer
+
+When deploying applications on AWS Elastic Beanstalk (EB), you have two main options for handling load balancing: let Beanstalk manage it for you automatically, or manually configure your own Application Load Balancer (ALB) and hook it into your environment.
+
+### Manual EC2 + ALB (Custom Infrastructure)
+
+This approach gives you full control over every part of your architecture. You manage EC2 instances, the ALB, security groups, scaling policies, and networking. It’s ideal for production-grade setups, custom routing logic, and when you need fine-tuned control over TLS, autoscaling, and deployment strategies.
+
+But that power comes with a cost: it’s slower to set up, requires solid AWS knowledge, and involves more ongoing maintenance.
+
+### Elastic Beanstalk (Load-Balanced Mode)
+
+Elastic Beanstalk offers a simplified, managed path for deploying applications, especially when you’re focused on getting something up and running quickly. It handles most of the heavy lifting for you: provisioning infrastructure, health monitoring, autoscaling, and even basic CI/CD hooks.
+
+However, this convenience comes with trade-offs in control and transparency. Beanstalk can abstract away critical pieces of infrastructure, and small changes (like a platform upgrade) can unintentionally trigger major infra changes like recreating load balancers or breaking TLS setups.
+
+<h2 style={{ color: "red" }}> When SSL/TLS Handshakes Fail Silently </h2>
+
+Setting up HTTPS for your application on AWS Elastic Beanstalk seems straightforward, until it isn’t. If you’re not careful with how TLS is configured, especially in load-balanced environments, you can end up in a situation where  **clients silently fail to connect**  and you have  **no logs, no errors, and no visibility**.
+
+### **Scenario: Upgrading Your Beanstalk Environment**
+
+You’re using Elastic Beanstalk to manage a Node.js application. It’s deployed in a load-balanced environment using a default Beanstalk-managed ALB (Application Load Balancer). At some point, you upgrade the platform to a latest version.
+
+As part of the upgrade, a new security policy was attached which uses  **stricter cipher suites** or **limited TLS version support**.
+
+The deployment goes live. Beanstalk reports success. Health checks are green. No alarms are triggered.
+
+### **Problem: Certain Clients Can’t Connect**
+
+Without realising it, you’ve now made your application  **inaccessible to some clients**. Specifically:
+
+-   Clients using **older TLS libraries**
+-   Legacy systems that only support outdated cipher suites
+-   Browsers or mobile devices in locked-down environments
+
+These clients attempt to connect but  **fail during the TLS handshake**. Since the request  **never completes**, it doesn’t reach your application and it doesn’t even show up in your app logs.
+
+To make matters worse,  **ALB access logs weren’t enabled**, so you have zero trace of the failed handshakes at the infrastructure level.
+
+### Why This Happens
+
+-   TLS handshakes fail  before the HTTP request is made.
+-   The ALB doesn’t forward anything to your app so your app knows nothing.
+-   If access logging on the ALB is disabled (which is the default),  **you have no visibility**  into the failure.
+-   Beanstalk’s “all green” status is based on internal health checks, not edge-case TLS compatibility.
+
+### How to Avoid this
+
+- Verify TLS compatibility before deploying a new policy ([AWS Security policies](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html))
+- If you serve legacy clients or B2B partners, assume there’s at least one ancient TLS stack out there still hanging on
+- Have ALB logs enabled
+- Monitor for traffic drops, not just error rates
+
+### Final thoughts
+
+These issues don’t come from bad code, they come from **small configuration changes with large ripple effects**. In environments like Beanstalk where AWS handles infra for you, it’s easy to forget how much is happening under the hood.
+
+While the issue in this scenario stemmed from an TLS misconfiguration at the load balancer level, it was indirectly caused by the way the app was deployed. Because containers were not used, upgrading the Node.js version meant upgrading the entire Elastic Beanstalk platform, which in turn triggered infrastructure changes, including a new, stricter TLS policy.
+
+If the application had been containerised, the Node.js version in the image was pinned and deployed as-is, without having to touch the load balancer or changing policies. It’s a reminder that containerisation doesn’t just make deployment more flexible, it reduces the risk of platform-coupled surprises.

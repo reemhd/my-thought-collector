@@ -21,7 +21,7 @@ export default function Navbar() {
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
               >
-                {hovered ? <FaCat /> : <GiCat />}
+                {hovered ? <FaCat color="orange"/> : <GiCat />}
               </span>
             </Link>
           </div>
@@ -34,7 +34,7 @@ export default function Navbar() {
               href="https://github.com/reemhd"
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-all hover:text-orange-400"
+              className="transition-all hover:text-orange-300"
             >
               <FaGithub size={20} />
             </Link>
@@ -42,7 +42,7 @@ export default function Navbar() {
               href="https://www.linkedin.com/in/reemhd"
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-all hover:text-orange-400"
+              className="transition-all hover:text-orange-300"
             >
               <FaLinkedin size={20} />
             </Link>
