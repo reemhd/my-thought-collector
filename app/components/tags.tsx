@@ -36,8 +36,8 @@ export default function Tags({ posts }: Props) {
             <button
               key={tag}
               onClick={() => setActiveTag(tag)}
-              className={`py-1 text-sm text-left cursor-pointer hover:text-orange-400 ${
-                activeTag === tag ? "text-orange-400 border-b" : "text-grey-600"
+              className={`py-1 text-sm text-left cursor-pointer hover:text-orange-300 ${
+                activeTag === tag ? "text-orange-300 border-b" : "text-grey-600"
               }`}
             >
               {tag}
@@ -59,7 +59,7 @@ export default function Tags({ posts }: Props) {
                 <span className="text-neutral-600 w-[120px]">
                   {post.created_at}
                 </span>
-                <span className="text-neutral-300 tracking-tight  hover:text-orange-400 transition">
+                <span className="text-neutral-300 tracking-tight  hover:text-orange-300 transition">
                   {post.title}
                 </span>
               </Link>
