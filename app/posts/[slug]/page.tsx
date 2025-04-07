@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { posts } from "@/app/lib/posts";
+import { getAllPosts } from "@/app/lib/posts";
 
 export default async function Page(props: {
   params: Promise<{ slug: string }>;
@@ -15,7 +15,8 @@ export default async function Page(props: {
   );
 }
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const posts = await getAllPosts()
   return posts.map((p) => ({ slug: p.slug }));
 }
 
