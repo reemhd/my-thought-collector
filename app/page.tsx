@@ -1,12 +1,15 @@
 import About from "./components/about";
-import Tags from "./components/tags";
-import { posts } from "@/app/lib/posts";
+import { Tags } from "./components/tags";
+import { getAllPosts, getAllTagsFromPosts } from "./lib/posts";
 
-export default function Home() {
+
+export default async function Home() {
+  const posts = await getAllPosts();
+  const tags = getAllTagsFromPosts(posts);
   return (
     <section>
       <About />
-      <Tags posts={posts} />
+      <Tags posts={posts} tags={tags} />
     </section>
   );
 }

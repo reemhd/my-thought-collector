@@ -1,3 +1,6 @@
+import fs from "fs";
+import path from "path";
+
 export type Post = {
   id: number;
   created_at: string;
@@ -6,48 +9,45 @@ export type Post = {
   slug: string;
 };
 
-const slugify = (str: string) =>
-  str
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w\-]+/g, "")
-    .replace(/\-\-+/g, "-")
-    .replace(/^-+/, "")
-    .replace(/-+$/, "");
+const blogDir = path.join(process.cwd(), "app/content");
 
-const rawPosts = [
-  {
-    id: 1,
-    created_at: "2 Apr 2025",
-    title: "AWS Elastic Beanstalk Load Balancer",
-    tags: ["engineering"],
-  },
-  // {
-  //   id: 2,
-  //   created_at: "12 Feb 2025",
-  //   title: "Basic Web Server with Go",
-  //   tags: ["engineering"],
-  // },
-  {
-    id: 3,
-    created_at: "19 Mar 2025",
-    title: "Debugging a Production Nightmare",
-    tags: ["engineering"],
-  },
-  // {
-  //   id: 4,
-  //   created_at: "6 April 2025",
-  //   title: "CIDR",
-  //   tags: ["engineering"],
-  // },
-];
+export async function getAllPosts(): Promise<Post[]> {
+  const files = fs.readdirSync(blogDir).filter((file) => file.endsWith(".mdx"));
 
-export const posts: Post[] = rawPosts.map((post) => {
-  const slug = slugify(post.title);
+  const posts: Post[] = [];
 
-  return {
-    ...post,
-    slug,
-  };
-});
+  for (let i = 0; i < files.length; i++) {
+    const fileName = files[i];
+    const slug = fileName.replace(/\.mdx$/, "");
+    const file = await import(`@/app/content/${slug}.mdx`);
+
+    const { title, created_at, tags } = file.metadata;
+
+    if (!title || !created_at || !tags) {
+      console.warn(`Missing metadata in file: ${fileName}`);
+      continue;
+    }
+
+    posts.push({
+      id: i + 1,
+      title,
+      created_at,
+      tags,
+      slug,
+    });
+  }
+
+  return posts;
+}
+
+export function getAllTagsFromPosts(posts: Post[]): string[] {
+  const tagSet = new Set<string>();
+
+  for (const post of posts) {
+    if (post.tags && Array.isArray(post.tags)) {
+      post.tags.forEach((tag) => tagSet.add(tag));
+    }
+  }
+
+  return Array.from(tagSet);
+}

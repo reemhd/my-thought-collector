@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { tags } from "@/app/lib/tags";
 import type { Post } from "@/app/lib/posts";
 
 type Props = {
   posts: Post[];
+  tags: string[];
 };
 
-export default function Tags({ posts }: Props) {
+export function Tags({ posts, tags }: Props) {
   const [activeTag, setActiveTag] = useState("all");
 
   const filteredPosts =
