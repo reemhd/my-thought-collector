@@ -24,6 +24,7 @@ const withMDX = nextMDX({
 const nextConfig = {
   reactStrictMode: true,
   pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
+  allowedDevOrigins: ["local-origin.dev", "*.local-origin.dev"],
 };
 
 export default withMDX(nextConfig);
