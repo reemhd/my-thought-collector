@@ -1,0 +1,342 @@
+export const metadata = {
+  "title": "Go Concepts",
+  "created_at": "19 Apr 2025",
+  "tags": [
+    "engineering"
+  ]
+};
+
+# Go Concepts
+
+Here are some of the core Go concepts covered:
+
+- [Interface](#interface)
+- [Goroutines](#goroutines)
+- [Channels](#channels)
+- [Context](#context)
+- [JSON marshaling and unmarshaling](#json-marshaling-and-unmarshaling)
+
+## Interface
+
+An [interface](https://gobyexample.com/interfaces) in go defines a set of method signatures. If a type implements all those methods, it satisfies the interface and no explicit declaration is needed.
+Example:
+
+```
+package main
+
+import (
+	"fmt"
+)
+
+type Speaker interface {
+	Speak() string
+}
+
+type Simulator struct {}
+
+type Human struct {
+  Question string
+}
+
+func (h Human) Speak() string {
+	return h.Question
+}
+
+func (s Simulator) Speak() string {
+	return "Just enjoy the game"
+}
+
+func MakeItTalk(s Speaker) string {
+	return s.Speak()
+}
+
+func main() {
+	h := Human{"Why are we here?"}
+	s := Simulator{}
+
+	hQuestion := MakeItTalk(h)
+	sAnswer := MakeItTalk(s)
+	
+	response := fmt.Sprintf("Human asks: %s\nSimulator responds: %s\n", hQuestion, sAnswer)
+  fmt.Println(response)
+}
+```
+
+- any type that has a Speak() string method is a Speaker
+- both Human and Simulator types satisfy the Speaker interface by implementing the Speak() string method
+- MakeItTalk takes any Speaker, calls .Speak() and returns the result. Works with both Human and Simulator thanks to interface
+- **fmt.Sprintf** returns the formatted string, %s is a placeholder for a string
+
+
+Back to http.ResponseWriter. It defines methods like:
+- Header() http.Header
+```
+w.Header().Set("Content-Type", "application/json")
+```
+
+- WriteHeader(statusCode int)
+```
+w.WriteHeader(http.StatusNotFound) // 404
+w.WriteHeader(http.StatusOK) // 200
+w.WriteHeader(http.StatusInternalServerError) // 500
+w.WriteHeader(http.StatusBadRequest) // 400
+w.WriteHeader(http.StatusUnauthorized) // 401
+```
+
+- Write([]byte) (int, error) which would same as io.WriteString(w, "text")
+```
+w.Write([]byte("Hello, world"))
+```
+
+So any type that implements these can be used as an http.ResponseWriter.
+
+## Goroutines
+
+[Goroutines](https://gobyexample.com/goroutines) are a lightweight thread managed by the Go runtime. It starts with the `go` keyword which spins it off in a new goroutine.
+
+```
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func sayHello() {
+	fmt.Println("Hello from goroutine")
+}
+
+func main() {
+	go sayHello()
+	fmt.Println("Hello from main")
+
+	time.Sleep(1 * time.Second)
+}
+```
+
+Output:
+```
+Hello from main
+Hello from goroutine
+```
+This is a typical result, but the order is not guaranteed because goroutines are scheduled concurrently by the Go runtime.
+
+If the main function ends, all goroutines are killed even if they haven't finished. Here I am using time.Sleep for now to prevent that.
+
+Thousands of these goroutines can be run and the Go runtime schedules them effciently using its own scheduler.
+
+Goroutines are background workers that do their job once the scheduler gives them a chance.
+
+## Channels
+
+Goroutines don't share data by default, they just run independently. To coordinate them or pass data between them safely, Go uses channels.
+
+A [channel](https://gobyexample.com/channels) is typed conduit for communication between goroutines. It allows goroutines to send data to one another in a thread-safe, synchronised way.
+
+
+```
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	ch := make(chan string)
+
+	go func() {
+		ch <- "hello from goroutine"
+	}()
+
+	msg := <-ch
+	fmt.Println(msg)
+}
+```
+
+In Go, every program starts with a single goroutine, the one running the main() function. The main goroutine waits (`<-ch`) until
+the anonymous goroutine sends a message.
+
+The anonymous goroutine waits (`ch <-`) until the main goroutine is ready to receive.
+
+Sending and receiving is synchronous, both sides have to be present at the same time if the channel is unbuffered (can't store anything on its own).
+
+So a channel is created (`ch := make(chan string)`), then a goroutine is started that tries to send a string to the channel (`ch <- "hello from goroutine"`). 
+
+Since the channel is unbuffered, the send cannot complete until someone receives it. The main goroutine receives the value (`msg := <-ch`). This exchange acts like a handshake, where both sides must be ready for the transfer to complete.
+
+This synchronisation makes channels powerful, they help you avoid race conditions without using mutexes or locks. 
+
+A mutex (short for mutual exclusion) ensures that only one goroutine can access a critical section of code or shared data at a time. It prevents race conditions by enforcing exclusive access.
+
+[Unbufferred vs buffered channels](https://gobyexample.com/channel-buffering)
+
+By default, channels are unbuffered, which means both sender and receiver must be ready at the same time.
+
+A buffered channel allows the sender to continue execution without blocking, until the buffer fills up.
+
+```
+ch := make(chan int, 2) // buffer size of 2
+ch <- 1
+ch <- 2
+// ch <- 3 // would block unless something is read
+```
+
+
+## Context
+
+The [context](https://gobyexample.com/context) package provides structured, idiomatic way to control goroutines and channels including cancellations, timeouts, and passing request-level data. Especially in HTTP servers, API calls, and microservices.
+
+`context.Context` is an interface.
+-	`context.Background()` → base context (root)
+-	`context.WithCancel(ctx)`
+-	`context.WithTimeout(ctx, duration)`
+-	`context.WithValue(ctx, key, val)`
+
+```
+package main
+
+import (
+	"context"
+	"fmt"
+	"time"
+)
+
+func main() {
+	ctx, cancel := context.WithCancel(context.Background())
+
+	go func() {
+		for {
+			select {
+			case <-ctx.Done():
+				fmt.Println("Goroutine canceled!")
+				return
+			default:
+				fmt.Println("Working...")
+				time.Sleep(300 * time.Millisecond)
+			}
+		}
+	}()
+
+	time.Sleep(1 * time.Second)
+	cancel() // tell the goroutine to stop
+	time.Sleep(300 * time.Millisecond) // give it time to print cancellation
+}
+```
+
+Output:
+```
+Working...
+Working...
+Working...
+Goroutine canceled!
+```
+
+`context.WithCancel(parent)` returns a new context and a `cancel()` function.
+
+`select` is a control structure like switch but designed to specifically work with channels.
+
+When `cancel()` is called, all goroutines listening to `ctx.Done()` will immediately receive a signal and can exit gracefully.
+
+`ctx.Done()` returns a channel: `<-chan struct{}` this is the channel that gets closed when the context is cancelled or times out.
+
+`struct{}` is an empty struct, it literally takes 0 bytes in memory. It is used when you want to signal an event or notification without sending any actual data.
+
+So `<-ctx.Done()` means block here until the context is cancelled then continue.
+
+Timeout can also be added:
+```
+ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+defer cancel()
+```
+
+This cancels the context automatically after 2 secs.
+
+`defer` is a keyword that delays the execution of a function until the surrounding function returns.
+
+Use cases:
+- Cancel API calls when the user disconnects or a timeout is hit
+- Limit a goroutine lifetime (avoid leaks)
+- Pass a request ID through layers for logging/tracing
+- Set a deadline for DB queries, HTTP calls, or background jobs
+
+## JSON marshaling and unmarshaling
+
+Marshaling is converting a Go value to JSON (goStruct -> jsonData).
+
+Unmarshaling converts JSON to a Go value (jsonData -> goStruct).
+
+Both are done using the encoding/json standard package.
+
+```
+package main
+
+import (
+	"fmt"
+	"encoding/json"
+)
+
+type Person struct {
+	Name string `json:"name"`
+	PetNames []string `json:"pet_names"`
+}
+
+func main() {
+	p := Person{Name: "Reem", PetNames: []string{"Poppy", "Lily"}}
+	
+	// Marshal struct into JSON
+	jsonBytes, err := json.Marshal(p)
+
+	if err != nil {
+		fmt.Println("Error marshaling:", err)
+		return
+	}
+
+	fmt.Println("Marshaled JSON:", string(jsonBytes))
+
+	// Umarshal it back to struct
+	var decoded Person
+	err = json.Unmarshal(jsonBytes, &decoded)
+	if (err != nil) {
+		fmt.Println("Error unmarshaling:", err)
+		return
+	}
+
+	fmt.Println("Decoded Struct:", decoded)
+}
+```
+Output:
+```
+Marshaled JSON: {"name":"Reem","pet_names":["Poppy","Lily"]}
+Decoded Struct: {Reem [Poppy Lily]}
+```
+First a Person struct is created.
+
+Then it is marshaled into JSON bytes (which could be sent to an API or saved).
+
+Then it is unmarshaled by:
+- declaring a variable of type Person, its empty at this point, all fields are zero value
+- using the function `json.Unmarshal` which takes two arguments: a slice of bytes that contain JSON and a pointer to decoded (a pointer required so that Unmarshal can access and modify the actual memory where decoded lives)
+
+This "serialising" and "deserialising" helps data to be sent over the network, saved to disks, passed between systems and stored to databases.
+
+This is akin to `json.dump`/`json.load` in Python and `JSON.stringify`/`JSON.parse` in JS. 
+
+But here are some advantages in Go:
+
+- Static typing = more safety. Go validates the data against your struct
+- Go is compiled and optimised so JSON handling is very fast and memory-efficient
+- Explicit field mapping via tags gives you fine-grained control over how Go struct fields are represented in JSON. For example:
+```
+type Coin struct {
+	Name   string  `json:"name"`
+	Price  float64 `json:"-"`  // Omit completely
+	Symbol string  `json:"symbol,omitempty"` // Omit if empty
+}
+```
+- Deterministic and predictable behaviour makes Go less forgiving but more robust as Go does not guess or coerce types. Eg. if price was a string in JSON, an error would be thrown
+
+- Supports streaming and decoding large JSON docs without loading the entire thing into memory using the Reader interface
+
+These are some of the core concepts in Go, it was designed to be simple and readable.
+
+Until next time ✌️
