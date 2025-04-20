@@ -1,6 +1,7 @@
 import nextMDX from "@next/mdx";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
+import toc from "rehype-toc";
 
 /** @type {import('rehype-pretty-code').Options} */
 const prettyCodeOptions = {
@@ -16,7 +17,11 @@ const withMDX = nextMDX({
   extension: /\.mdx?$/,
   options: {
     remarkPlugins: [],
-    rehypePlugins: [[rehypePrettyCode, prettyCodeOptions], rehypeSlug],
+    rehypePlugins: [
+      [rehypePrettyCode, prettyCodeOptions],
+      rehypeSlug,
+      [toc, { headings: ["h2", "h3"] }, { position: "beforebegin" }],
+    ],
   },
 });
 

@@ -4,11 +4,9 @@ export const metadata = {
   tags: ["engineering"],
 };
 
-# Debugging a production nightmare
-
 I was assigned a seemingly simple task that spiralled into a production issue affecting unrelated parts of the system. What followed was a valuable (and painful) lesson in system design, JavaScript quirks, and the risks of shared mutable state in a monolithic architecture.
 
-### The setup
+## The setup
 
 The system was a large monolith composed of multiple logical components all running in the same process. One of these components used a hardcoded list of “questions” as part of a dynamic form flow.
 
@@ -18,7 +16,7 @@ No database migration, no configuration system, just append an object to a stati
 
 I wasn’t thrilled about the hardcoded setup, but it was meant to be a low-risk change. I added the question, tested the feature, passed QA, and deployed to production.
 
-### The bug
+## The bug
 
 The next day, a different component of the codebase started showing a pre-filled answer to this new question. Except no one had filled them in. There was no data entry. These answers were ghosts.
 
@@ -28,7 +26,7 @@ I checked the database: nothing.
 I read through the code paths: nothing.
 I added logs directly in production. That’s when I saw it.
 
-### The cause
+## The cause
 
 The array of questions was being  **shared across modules**, passed around by reference. Somewhere downstream, another part of the application was  **mutating**  that array, modifying it in place by appending answers.
 
@@ -48,7 +46,7 @@ module.exports = getAllQuestions;
 
 getAllQuestions was imported in various modules leading to adding an answer somewhere along the way...
 
-### The quick fix
+## The quick fix
 
 Deep-copy the array before passing it between modules.
 
@@ -58,7 +56,7 @@ const getAllQuestions = () => JSON.parse(JSON.stringify(questions));
 
 After that, everything worked as expected. The newly added question remained untouched, and the API behaviour stabilised.
 
-### Long-term fix
+## Long-term fix
 
 Deep-copying solved the immediate issue, but the real problem was deeper: the system had no clear boundaries or ownership of data, and critical config was being shared and mutated across modules.
 
@@ -66,7 +64,7 @@ A better long-term solution would involve moving the questions into a database w
 
 Eventually, parts of the monolith should probably be refactored into loosely coupled services, or at least well-encapsulated modules that communicate through defined interfaces, not shared memory.
 
-### Final thoughts
+## Final thoughts
  
 **const in JS/TS gives you a false sense of safety**, it only protects the reference, not the contents.
     
