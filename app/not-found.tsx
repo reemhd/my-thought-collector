@@ -1,8 +1,10 @@
-"use client";
-
 import Link from "next/link";
 import { IoPawSharp } from "react-icons/io5";
+import type { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Reem/Not Found",
+}
 
 export default function NotFound() {
   return (
