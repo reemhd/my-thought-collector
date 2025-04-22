@@ -17,7 +17,7 @@ const jet = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Reem's",
+  title: "Reem/",
   description: "Reem's website",
 };
 
