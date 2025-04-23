@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Footer from "./components/footer";
 import Navbar from "./components/nav";
+import { Analytics } from "@vercel/analytics/react";
 
 const dm = DM_Sans({
   subsets: ["latin"],
@@ -16,14 +17,16 @@ const jet = JetBrains_Mono({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL('https://reemdalvi.com'),
-  title: "Reem/",
-  description: "Thought dumping ground",
-  openGraph: {
-    images: "/hole.png",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    metadataBase: new URL("https://reemdalvi.com"),
+    title: "Reem/",
+    description: "Thought dumping ground",
+    openGraph: {
+      images: "/hole.png",
+    },
+  };
+}
 
 export default function RootLayout({
   children,
@@ -42,6 +45,7 @@ export default function RootLayout({
             <Footer />
           </div>
         </main>
+        <Analytics />
       </body>
     </html>
   );
