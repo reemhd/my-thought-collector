@@ -17,8 +17,12 @@ const jet = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://reemdalvi.com'),
   title: "Reem/",
-  description: "Reem's website",
+  description: "Thought dumping ground",
+  openGraph: {
+    images: "/hole.png",
+  },
 };
 
 export default function RootLayout({

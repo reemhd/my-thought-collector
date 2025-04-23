@@ -10,6 +10,10 @@ export async function generateMetadata(props: {
 
   return {
     title: `Reem/${metadata.title}`,
+    description: metadata.description,
+    openGraph: {
+      images: metadata.image
+    }
   };
 }
 
