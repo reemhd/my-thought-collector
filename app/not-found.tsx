@@ -4,7 +4,11 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Reem/Not Found",
-}
+  description: "Lost?",
+  openGraph: {
+    images: "/404.png",
+  },
+};
 
 export default function NotFound() {
   return (
