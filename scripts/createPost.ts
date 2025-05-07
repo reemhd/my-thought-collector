@@ -35,6 +35,8 @@ const metadata = {
   title,
   created_at: date,
   tags,
+  description: "",
+  image: "",
 };
 
 const content = `export const metadata = ${JSON.stringify(metadata, null, 2)};

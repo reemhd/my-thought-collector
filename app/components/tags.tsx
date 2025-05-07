@@ -32,7 +32,7 @@ export function Tags({ posts, tags }: Props) {
     <section>
       <div className="my-2">
         <div className="flex flex-wrap gap-4">
-          {tags.map((tag) => (
+          {tags?.length > 1 && tags.map((tag) => (
             <button
               key={tag}
               onClick={() => setActiveTag(tag)}
