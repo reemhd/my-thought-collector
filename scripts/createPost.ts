@@ -41,8 +41,6 @@ const metadata = {
 
 const content = `export const metadata = ${JSON.stringify(metadata, null, 2)};
 
-# ${title}
-
 Content...
 `;
 
