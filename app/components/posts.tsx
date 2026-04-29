@@ -3,7 +3,6 @@ import type { Post } from "@/app/lib/posts";
 
 type Props = {
   posts: Post[];
-  tags: string[];
 };
 
 const tagColours: Record<string, string> = {
@@ -13,7 +12,7 @@ const tagColours: Record<string, string> = {
 
 const currentYear = new Date().getFullYear().toString();
 
-export function Posts({ posts, tags }: Props) {
+export function Posts({ posts }: Props) {
   const sorted = [...posts].sort((a, b) =>
     new Date(a.created_at) > new Date(b.created_at) ? -1 : 1,
   );

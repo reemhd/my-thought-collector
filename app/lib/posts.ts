@@ -41,15 +41,3 @@ export async function getAllPosts(): Promise<Post[]> {
 
   return posts;
 }
-
-export function getAllTagsFromPosts(posts: Post[]): string[] {
-  const tagSet = new Set<string>();
-
-  for (const post of posts) {
-    if (post.tags && Array.isArray(post.tags)) {
-      post.tags.forEach((tag) => tagSet.add(tag));
-    }
-  }
-
-  return Array.from(tagSet);
-}
