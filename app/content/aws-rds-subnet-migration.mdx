@@ -2,25 +2,25 @@ export const metadata = {
   "title": "AWS RDS Subnet Migration",
   "created_at": "5 May 2025",
   "tags": [
-    "engineering"
+    "Technical"
   ],
-  "description": "How to move RDS instances from public to private subnets within the same VPC",
+  "description": "Moving a live RDS instance from public to private subnets sounds like it requires a full rebuild, it doesn't. Here's how to do it with minimal downtime using Multi-AZ failover.",
   "image": "/aws.png"
 };
 
 ## Overview
 
-I’ll walk through how to migrate AWS RDS instances from public subnets to private subnets within the same VPC without recreating the database. The method minimises downtime beyond a controlled failover using built-in AWS functionality.
+I'll walk through how to migrate AWS RDS instances from public subnets to private subnets within the same VPC without recreating the database. The method minimises downtime beyond a controlled failover using built-in AWS functionality.
 
-This post assumes you’re using Amazon RDS (e.g. PostgreSQL or MySQL), with Multi-AZ deployment enabled, and your DB is currently hosted in a public subnet.
+This post assumes you're using Amazon RDS (e.g. PostgreSQL or MySQL), with Multi-AZ deployment enabled, and your DB is currently hosted in a public subnet.
 
 ## Why it matters
 
 RDS instances placed in public subnets are reachable via a public IP if they are marked as publicly accessible. Even if properly restricted with security groups, this is unnecessary exposure. The best practice is to deploy RDS instances in private subnets to eliminate any potential public routing path.
 
-The challenge is that you can’t simply change the subnet group of an existing RDS instance within the same VPC. AWS doesn’t allow that through the console or CLI once the instance is created, and many teams assume this requires snapshotting and recreating the DB, which comes with downtime and operational risk.
+The challenge is that you can't simply change the subnet group of an existing RDS instance within the same VPC. AWS doesn't allow that through the console or CLI once the instance is created, and many teams assume this requires snapshotting and recreating the DB, which comes with downtime and operational risk.
 
-Fortunately, there’s a workaround that uses Multi-AZ failover to force the DB into private subnets safely and with minimal disruption.
+Fortunately, there's a workaround that uses Multi-AZ failover to force the DB into private subnets safely and with minimal disruption.
 
 ## The Plan
 
@@ -36,7 +36,7 @@ Although the process is safe, taking a snapshot is a good precaution. It provide
 
 2. **Disable Multi-AZ temporarily**
 
-You can’t remove or add subnets to a DB subnet group while they are in active use. Disabling Multi-AZ drops the standby and frees you to edit the subnet group.
+You can't remove or add subnets to a DB subnet group while they are in active use. Disabling Multi-AZ drops the standby and frees you to edit the subnet group.
 
 3. **Edit the Subnet group**
 
@@ -70,6 +70,6 @@ Enabling Multi-AZ again will create a new standby in one of the private subnets,
 
 ## Takeaways
 
-This approach avoids the need to snapshot and restore or spin up a new DB instance. It leverages AWS’s own failover mechanism to move a live production database into a secure, isolated network space with minimal effort and downtime.
+This approach avoids the need to snapshot and restore or spin up a new DB instance. It leverages AWS's own failover mechanism to move a live production database into a secure, isolated network space with minimal effort and downtime.
 
-If you’re still running RDS in a public subnet, you can migrate it safely without a full rebuild, just understand the timing and plan for the short outage when failover occurs.
+If you're still running RDS in a public subnet, you can migrate it safely without a full rebuild, just understand the timing and plan for the short outage when failover occurs.

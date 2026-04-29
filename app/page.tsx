@@ -1,5 +1,4 @@
-import About from "./components/about";
-import { Tags } from "./components/tags";
+import { Posts } from "./components/posts";
 import { getAllPosts, getAllTagsFromPosts } from "./lib/posts";
 
 
@@ -8,8 +7,7 @@ export default async function Home() {
   const tags = getAllTagsFromPosts(posts);
   return (
     <section>
-      <About />
-      <Tags posts={posts} tags={tags} />
+      <Posts posts={posts} tags={tags} />
     </section>
   );
 }

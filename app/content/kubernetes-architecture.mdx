@@ -2,9 +2,9 @@ export const metadata = {
   "title": "Kubernetes Architecture",
   "created_at": "19 Sept 2025",
   "tags": [
-    "engineering"
+    "Technical"
   ],
-  "description": "",
+  "description": "A breakdown of Kubernetes architecture: control plane, worker nodes, networking, and storage. Covering how the pieces fit together and why each component exists.",
   "image": "/k8s.png"
 };
 
@@ -39,7 +39,7 @@ Makes things much easier for users especially when it comes to managing hundreds
 
 *Kubernetes or k8s (like pilot on a ship of containers) is an open-source container orchestrator used for automating deployment, scaling and management of containerised applications, and ensure high availability.*
 
-Kubernetes was derived from Google’s Borg and written in Go.
+Kubernetes was derived from Google's Borg and written in Go.
 
 One of Kubernetes' strengths is portability. It can be deployed in many environments such as local or remote Virtual Machines (VMs), bare metal, or in public/private/hybrid/multi-cloud setups.
 
@@ -64,24 +64,24 @@ The key components are the Control Plane which manages the cluster and ensures t
     - API server
         - kube-apiserver coordinates all admin tasks
         - Intercepts RESTful calls, validates and processes them
-        - Starts by reading the cluster’s state from key-value (kv) store and updates the state after the execution call
-        - It’s the only CP component that communicates with kv store, therefore acting as a middle interface for any other CP agent inquiring about state
+        - Starts by reading the cluster's state from key-value (kv) store and updates the state after the execution call
+        - It's the only CP component that communicates with kv store, therefore acting as a middle interface for any other CP agent inquiring about state
         - Highly configurable and customisable. Scales horizontally and also custom secondary API servers can be added, transforming primary as a proxy to all secondary and routing RESTful calls to them based on rules defined
     - Scheduler
         - kube-scheduler assigns new workload object to worker nodes
-        - the resource usage data for each worker nodes and workload object’s requirements such as constraints set by user or operators “disk: ssd” from kv store is retrieved via the API server
+        - the resource usage data for each worker nodes and workload object's requirements such as constraints set by user or operators “disk: ssd” from kv store is retrieved via the API server
         - Scheduler also takes into account Quality of Service (QoS) requirements, data locality, affinity, anti-affinity, taints & toleration, cluster topology
         - Once all cluster data is available, Scheduler filters nodes that satisfies all requirements for hosting new workload
         - Scheduler is highly configurable and customisable through policies, plugins and profiles
     - Controller managers
         - Runs controllers or operator processes that regulate the state of the k8s cluster
-        - Controllers are watch-loop continuously running comparing the current state (kv store via apiserver) and desired state (object’s config data). Ensures correction action if any mismatch present
+        - Controllers are watch-loop continuously running comparing the current state (kv store via apiserver) and desired state (object's config data). Ensures correction action if any mismatch present
         - kube-controller-manager run controllers or operators that act when nodes become unavailable to ensure the container pods are as expected, to create endpoints, service accounts, and API access tokens
         - cloud-controller-manager run controllers or operators that interact with underlying cloud infra when nodes become unavailable, to manage store volumes (cloud), load balancing and routing
     - Key-value data stores
         - etcd is an open source kv store where new data is appended on and not replaced. Obsolete data is compacted periodically to minimise the size of the data store
         - Only API server can communicate with it
-        - etcdctl (etcd’s CLI management tool) provides snapshot save and restore capabilities in single etcd instance K8s cluster example Dev/Staging. But in Prod its important to replicate the data store in HA mode (data resilience)
+        - etcdctl (etcd's CLI management tool) provides snapshot save and restore capabilities in single etcd instance K8s cluster example Dev/Staging. But in Prod its important to replicate the data store in HA mode (data resilience)
         - Some K8s cluster bootstrapping tools such as kubeadm provision stacked etcd CP nodes
         - For data store isolation from CP, bootstrapping process can be configured for an external etcd topology (dedicated separate host), reducing chance of an etcd failure
         - Both stacked and external support HA config
@@ -144,7 +144,7 @@ Decoupled microservices based applications rely heavily on networking in order t
     - Pod-to-Pod communication on the same node and across cluster nodes
         - Pods are expected to be able to communicate with all other Pods in the cluster, all this without the implementation of Network Address Translation (NAT). This is a fundamental requirement of any networking implementation in Kubernetes.
         - The Kubernetes network model aims to reduce complexity, and it treats Pods as VMs on a network, where each VM is equipped with a network interface - thus each Pod receiving a unique IP address. This model is called "**IP-per-Pod**" and ensures Pod-to-Pod communication, just as VMs are able to communicate with each other on the same network.
-        - Containers share the Pod's network namespace and must coordinate ports assignment inside the Pod just as applications would on a VM, all while being able to communicate with each other on **localhost** - inside the Pod. Uses CNI.
+        - Containers share the Pod's network namespace and must coordinate ports assignment inside the Pod just as applications would on a VM, all while being able to communicate with each other on **localhost** - inside the Pod. Uses CNI.
     - Service-to-Pod communication within the same namespace and across cluster namespaces
     - External-to-Service communication for clients to access applications in a cluster
         - A successfully deployed containerised application running in Pods inside a Kubernetes cluster may require accessibility from the outside world. Kubernetes enables external accessibility through Services, complex encapsulations of network routing rule definitions stored in iptables on cluster nodes and implemented by kube-proxy agents. By exposing services to the external world with the aid of kube-proxy, applications become accessible from outside the cluster over a virtual IP address and a dedicated port number.
