@@ -31,7 +31,7 @@ export function Posts({ posts }: Props) {
       {years.map((year) => (
         <div key={year} className="my-4">
           {year !== currentYear && (
-            <div className="font-mono text-neutral-300 w-[120px] my-10">
+            <div className="font-mono text-base text-neutral-300 w-[120px] my-10">
               {year}
             </div>
           )}

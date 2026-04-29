@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getAllPosts } from "@/app/lib/posts";
 import type { Metadata } from "next";
+import BackToTop from "@/app/components/back-to-top";
 
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>;
@@ -30,6 +31,7 @@ export default async function Page(props: {
       <p>{metadata.description}</p>
       <span className="font-mono text-sm">{metadata.created_at}</span>
       <Post />
+      <BackToTop />
     </article>
   );
 }
