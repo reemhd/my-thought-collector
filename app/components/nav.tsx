@@ -1,12 +1,10 @@
 "use client";
 import { useState } from "react";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
-import { GiCat } from "react-icons/gi";
-import { FaCat } from "react-icons/fa6";
 import Link from "next/link";
+import PyramidLogo from "./PyramidLogo";
 
 export default function Navbar() {
-  const [hovered, setHovered] = useState(false);
   return (
     <aside className="mb-6 tracking-tight">
       <div className="lg:sticky lg:top-20">
@@ -16,13 +14,9 @@ export default function Navbar() {
         >
           <div className="flex flex-row gap-4">
             <Link href="/" className="text-inherit no-underline">
-              <span
-                className="text-2xl font-semibold tracking-tighter flex items-center gap-2 cursor-pointer"
-                onMouseEnter={() => setHovered(true)}
-                onMouseLeave={() => setHovered(false)}
-              >
-                {hovered ? <FaCat color="orange"/> : <GiCat />}
-              </span>
+              <div >
+                <PyramidLogo />
+              </div>
             </Link>
           </div>
 
@@ -36,7 +30,7 @@ export default function Navbar() {
               rel="noopener noreferrer"
               className="transition-all hover:text-orange-300"
             >
-              <FaGithub size={20} />
+              <FaGithub size={30} />
             </Link>
             <Link
               href="https://www.linkedin.com/in/reemhd"
@@ -44,7 +38,7 @@ export default function Navbar() {
               rel="noopener noreferrer"
               className="transition-all hover:text-orange-300"
             >
-              <FaLinkedin size={20} />
+              <FaLinkedin size={30} />
             </Link>
           </div>
         </nav>

@@ -53,7 +53,7 @@ export function Posts({ posts }: Props) {
                   <span className="font-serif text-2xl text-neutral-300 tracking-tight pb-1 group-hover:text-orange-300 transition my-2">
                     {post.title}
                   </span>
-                  <span className="font-sans text-base text-neutral-400 tracking-tight group-hover:text-orange-300 transition mb-1">
+                  <span className="font-sans text-base text-neutral-400 tracking-tight mb-1">
                     {post.description}
                   </span>
                 </Link>
