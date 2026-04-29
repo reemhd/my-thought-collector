@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import Link from "next/link";
 import PyramidLogo from "./PyramidLogo";
