@@ -1,9 +1,15 @@
-import { DM_Sans, JetBrains_Mono } from "next/font/google";
+import { DM_Sans, JetBrains_Mono, Lora } from "next/font/google";
 import type { Metadata } from "next";
 import "./globals.css";
 import Footer from "./components/footer";
 import Navbar from "./components/nav";
 import { Analytics } from "@vercel/analytics/react";
+
+const lora = Lora({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  display: "swap",
+});
 
 const dm = DM_Sans({
   subsets: ["latin"],
@@ -34,7 +40,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${dm.variable} ${jet.variable}`}>
+    <html lang="en" className={`${dm.variable} ${jet.variable} ${lora.variable}`}>
       <body className=" max-w-2xl mx-4 mt-8 lg:mx-auto">
         <main className="flex-auto sm:min-w-screen md:min-w-0 min-h-screen flex flex-col px-2 md:px-0 text-gray-300">
           <div className="flex-none h-1/4">

@@ -7,6 +7,7 @@ export type Post = {
   title: string;
   tags: string[];
   slug: string;
+  description: string
 };
 
 const blogDir = path.join(process.cwd(), "app/content");
@@ -21,7 +22,7 @@ export async function getAllPosts(): Promise<Post[]> {
     const slug = fileName.replace(/\.mdx$/, "");
     const file = await import(`@/app/content/${slug}.mdx`);
 
-    const { title, created_at, tags } = file.metadata;
+    const { title, created_at, tags, description } = file.metadata;
 
     if (!title || !created_at || !tags) {
       console.warn(`Missing metadata in file: ${fileName}`);
@@ -34,20 +35,9 @@ export async function getAllPosts(): Promise<Post[]> {
       created_at,
       tags,
       slug,
+      description
     });
   }
 
   return posts;
-}
-
-export function getAllTagsFromPosts(posts: Post[]): string[] {
-  const tagSet = new Set<string>();
-
-  for (const post of posts) {
-    if (post.tags && Array.isArray(post.tags)) {
-      post.tags.forEach((tag) => tagSet.add(tag));
-    }
-  }
-
-  return Array.from(tagSet);
 }

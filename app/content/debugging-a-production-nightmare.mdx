@@ -1,8 +1,8 @@
 export const metadata = {
   created_at: "19 Mar 2025",
   title: "Debugging a Production Nightmare",
-  tags: ["engineering"],
-  description: "I was assigned a seemingly simple task that spiralled into a production issue affecting unrelated parts of the system.",
+  tags: ["Technical"],
+  description: "I added one question to a hardcoded array and broke an unrelated part of production the next day. The culprit: shared mutable state silently leaking across module boundaries.",
   image: "/ghost.png"
 };
 
@@ -16,7 +16,7 @@ My task was to add a new question to this list. This was the first "new" questio
 
 No database migration, no configuration system, just append an object to a static array declared in code.
 
-I wasn’t thrilled about the hardcoded setup, but it was meant to be a low-risk change. I added the question, tested the feature, passed QA, and deployed to production.
+I wasn't thrilled about the hardcoded setup, but it was meant to be a low-risk change. I added the question, tested the feature, passed QA, and deployed to production.
 
 ## The bug
 
@@ -26,7 +26,7 @@ This should have been impossible.
 
 I checked the database: nothing.
 I read through the code paths: nothing.
-I added logs directly in production. That’s when I saw it.
+I added logs directly in production. That's when I saw it.
 
 ## The cause
 
@@ -70,8 +70,8 @@ Eventually, parts of the monolith should probably be refactored into loosely cou
  
 **const in JS/TS gives you a false sense of safety**, it only protects the reference, not the contents.
     
-Always assume your data can be mutated unless you’ve made it truly read-only.
+Always assume your data can be mutated unless you've made it truly read-only.
 
-If you’re building anything more complex than a to-do list,  **shared mutable state is a trap**. Wrap your arrays. Clone your objects. Trust no one. Especially not past developers. Especially not yourself.
+If you're building anything more complex than a to-do list,  **shared mutable state is a trap**. Wrap your arrays. Clone your objects. Trust no one. Especially not past developers. Especially not yourself.
 
-And maybe, just maybe, don’t hardcode production-critical data into a single shared array.
+And maybe, just maybe, don't hardcode production-critical data into a single shared array.

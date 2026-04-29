@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getAllPosts } from "@/app/lib/posts";
 import type { Metadata } from "next";
+import BackToTop from "@/app/components/back-to-top";
 
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>;
@@ -25,9 +26,12 @@ export default async function Page(props: {
   if (!Post) return notFound();
 
   return (
-    <article className="prose prose-invert text-gray-300 mt-4">
-      <h1 className="text-3xl font-bold mb-4">{metadata.title}</h1>
+    <article className="prose prose-lg prose-invert text-gray-300 mt-4">
+      <h1 className="font-serif text-3xl font-bold mb-4">{metadata.title}</h1>
+      <p>{metadata.description}</p>
+      <span className="font-mono text-sm">{metadata.created_at}</span>
       <Post />
+      <BackToTop />
     </article>
   );
 }
