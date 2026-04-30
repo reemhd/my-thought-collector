@@ -58,7 +58,7 @@ export function Posts({ posts }: Props) {
             className={`flex items-center gap-1 font-mono text-xs px-2 py-1 rounded transition ${
               selectedTag
                 ? "text-orange-300"
-                : "text-neutral-500 hover:text-orange-300"
+                : "text-neutral-400 hover:text-orange-300"
             }`}
             aria-label="Filter by tag"
           >

@@ -35,6 +35,17 @@ pre {
 
 h1,
 h2,
-h3 {
+h3,
+li,
+strong,
+a {
   color: var(--color-gray-300);
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  color: rgb(253 186 116);
 }

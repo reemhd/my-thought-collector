@@ -13,8 +13,8 @@ export async function generateMetadata(props: {
     title: `Reem/${metadata.title}`,
     description: metadata.description,
     openGraph: {
-      images: metadata.image
-    }
+      images: metadata.image,
+    },
   };
 }
 
@@ -27,9 +27,10 @@ export default async function Page(props: {
 
   return (
     <article className="prose prose-lg prose-invert text-gray-300 mt-4">
-      <h1 className="font-serif text-3xl font-bold mb-4">{metadata.title}</h1>
-      <p>{metadata.description}</p>
-      <span className="font-mono text-sm">{metadata.created_at}</span>
+      <span className="font-serif  text-2xl mb-4">{metadata.title}</span>
+      <p className="font-mono text-sm text-neutral-500">
+        {metadata.created_at}
+      </p>
       <Post />
       <BackToTop />
     </article>
