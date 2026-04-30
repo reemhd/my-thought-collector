@@ -53,8 +53,8 @@ export default function PyramidLogo() {
   return (
     <svg
       ref={svgRef}
-      width="50"
-      height="50"
+      width="40"
+      height="40"
       viewBox="0 0 180 180"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
