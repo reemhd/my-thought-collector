@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useState, useRef, useEffect } from "react";
 import type { Post } from "@/app/lib/posts";
 
 type Props = {
@@ -13,7 +16,27 @@ const tagColours: Record<string, string> = {
 const currentYear = new Date().getFullYear().toString();
 
 export function Posts({ posts }: Props) {
-  const sorted = [...posts].sort((a, b) =>
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const allTags = Array.from(new Set(posts.flatMap((p) => p.tags)));
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const filtered = selectedTag
+    ? posts.filter((p) => p.tags.includes(selectedTag))
+    : posts;
+
+  const sorted = [...filtered].sort((a, b) =>
     new Date(a.created_at) > new Date(b.created_at) ? -1 : 1,
   );
 
@@ -28,6 +51,46 @@ export function Posts({ posts }: Props) {
 
   return (
     <section>
+      <div className="flex justify-end mb-2 mt-6" ref={dropdownRef}>
+        <div className="relative">
+          <button
+            onClick={() => setIsOpen((o) => !o)}
+            className={`flex items-center gap-1 font-mono text-xs px-2 py-1 rounded transition ${
+              selectedTag
+                ? "text-orange-300"
+                : "text-neutral-500 hover:text-orange-300"
+            }`}
+            aria-label="Filter by tag"
+          >
+            {selectedTag ?? "filter"}
+          </button>
+
+          {isOpen && (
+            <div className="absolute right-0 mt-1 w-36 bg-neutral-900 border border-neutral-700 rounded shadow-lg z-10 py-1">
+              <button
+                onClick={() => { setSelectedTag(null); setIsOpen(false); }}
+                className={`w-full text-left px-3 py-1.5 font-mono text-xs transition ${
+                  !selectedTag ? "text-orange-300" : "text-neutral-400 hover:text-orange-200"
+                }`}
+              >
+                all
+              </button>
+              {allTags.map((tag) => (
+                <button
+                  key={tag}
+                  onClick={() => { setSelectedTag(tag); setIsOpen(false); }}
+                  className={`w-full text-left px-3 py-1.5 font-mono text-xs transition ${
+                    selectedTag === tag ? "text-orange-300" : "text-neutral-400 hover:text-neutral-200"
+                  }`}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
       {years.map((year) => (
         <div key={year} className="my-4">
           {year !== currentYear && (
