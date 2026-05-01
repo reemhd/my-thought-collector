@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
+import { BiLike } from "react-icons/bi";
 import type { Post } from "@/app/lib/posts";
 
 type Props = {
   posts: Post[];
+  likes: Record<string, number>;
 };
 
 const tagColours: Record<string, string> = {
@@ -15,7 +17,7 @@ const tagColours: Record<string, string> = {
 
 const currentYear = new Date().getFullYear().toString();
 
-export function Posts({ posts }: Props) {
+export function Posts({ posts, likes }: Props) {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -68,9 +70,14 @@ export function Posts({ posts }: Props) {
           {isOpen && (
             <div className="absolute right-0 mt-1 w-36 bg-neutral-900 border border-neutral-700 rounded shadow-lg z-10 py-1">
               <button
-                onClick={() => { setSelectedTag(null); setIsOpen(false); }}
+                onClick={() => {
+                  setSelectedTag(null);
+                  setIsOpen(false);
+                }}
                 className={`w-full text-left px-3 py-1.5 font-mono text-xs transition ${
-                  !selectedTag ? "text-orange-300" : "text-neutral-400 hover:text-orange-200"
+                  !selectedTag
+                    ? "text-orange-300"
+                    : "text-neutral-400 hover:text-orange-200"
                 }`}
               >
                 all
@@ -78,9 +85,14 @@ export function Posts({ posts }: Props) {
               {allTags.map((tag) => (
                 <button
                   key={tag}
-                  onClick={() => { setSelectedTag(tag); setIsOpen(false); }}
+                  onClick={() => {
+                    setSelectedTag(tag);
+                    setIsOpen(false);
+                  }}
                   className={`w-full text-left px-3 py-1.5 font-mono text-xs transition ${
-                    selectedTag === tag ? "text-orange-300" : "text-neutral-400 hover:text-neutral-200"
+                    selectedTag === tag
+                      ? "text-orange-300"
+                      : "text-neutral-400 hover:text-neutral-200"
                   }`}
                 >
                   {tag}
@@ -120,9 +132,17 @@ export function Posts({ posts }: Props) {
                     {post.description}
                   </span>
                 </Link>
-                <span className="font-mono text-xs text-neutral-500 w-[120px]">
-                  {post.created_at}
-                </span>
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-xs text-neutral-500">
+                    {post.created_at}
+                  </span>
+                  {likes[post.slug] > 0 && (
+                    <span className="flex items-center gap-0.5 font-mono text-xs text-neutral-500">
+                      <BiLike size={14} />
+                      <div className="mt-1">{likes[post.slug]}</div>
+                    </span>
+                  )}
+                </div>
               </div>
             ))}
           </div>
