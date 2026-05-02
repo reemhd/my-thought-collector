@@ -9,15 +9,18 @@ export async function generateMetadata(props: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await props.params;
-  const { metadata } = await import(`@/app/content/${slug}.mdx`);
-
-  return {
-    title: `Reem/${metadata.title}`,
-    description: metadata.description,
-    openGraph: {
-      images: metadata.image,
-    },
-  };
+  try {
+    const { metadata } = await import(`@/app/content/${slug}.mdx`);
+    return {
+      title: `Reem/${metadata.title}`,
+      description: metadata.description,
+      openGraph: {
+        images: metadata.image,
+      },
+    };
+  } catch {
+    return { title: "Reem/Not Found" };
+  }
 }
 
 export default async function Page(props: {

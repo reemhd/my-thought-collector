@@ -2,16 +2,13 @@ import Link from "next/link";
 import { IoPawSharp } from "react-icons/io5";
 import type { Metadata } from "next";
 
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    metadataBase: new URL("https://reemdalvi.com"),
-    title: "Reem/Not Found",
-    description: "Lost?",
-    openGraph: {
-      images: "/404.png",
-    },
-  };
-}
+export const metadata: Metadata = {
+  title: "Reem/Not Found",
+  description: "Lost?",
+  openGraph: {
+    images: "/404.png",
+  },
+};
 
 export default function NotFound() {
   return (
