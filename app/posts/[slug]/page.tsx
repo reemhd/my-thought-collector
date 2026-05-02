@@ -19,7 +19,7 @@ export async function generateMetadata(props: {
       },
     };
   } catch {
-    return { title: "Reem/Not Found" };
+    notFound();
   }
 }
 
@@ -27,11 +27,11 @@ export default async function Page(props: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await props.params;
-  const [{ default: Post, metadata }, initialCount] = await Promise.all([
-    import(`@/app/content/${slug}.mdx`),
-    getLikes(slug),
-  ]);
-  if (!Post) return notFound();
+  const mdxModule = await import(`@/app/content/${slug}.mdx`).catch(() => null);
+  if (!mdxModule) notFound();
+  const { default: Post, metadata } = mdxModule;
+  const initialCount = await getLikes(slug);
+  if (!Post) notFound();
 
   return (
     <article className="prose prose-lg prose-invert text-gray-300 mt-4">
