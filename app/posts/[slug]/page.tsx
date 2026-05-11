@@ -36,11 +36,11 @@ export default async function Page(props: {
   return (
     <article className="prose prose-lg prose-invert text-gray-300 mt-4">
       <span className="font-serif  text-2xl mb-4">{metadata.title}</span>
-      <div className="flex items-center justify-between not-prose mb-4">
-        <p className="font-mono text-sm text-neutral-500">{metadata.created_at}</p>
+      <p className="font-mono text-sm text-neutral-500 not-prose mb-4">{metadata.created_at}</p>
+      <Post />
+      <div className="not-prose mt-8 flex justify-end">
         <ThumbsUp slug={slug} initialCount={initialCount} />
       </div>
-      <Post />
       <BackToTop />
     </article>
   );

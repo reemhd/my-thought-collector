@@ -2,12 +2,10 @@
 
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
-import { BiLike } from "react-icons/bi";
 import type { Post } from "@/app/lib/posts";
 
 type Props = {
   posts: Post[];
-  likes: Record<string, number>;
 };
 
 const tagColours: Record<string, string> = {
@@ -17,7 +15,7 @@ const tagColours: Record<string, string> = {
 
 const currentYear = new Date().getFullYear().toString();
 
-export function Posts({ posts, likes }: Props) {
+export function Posts({ posts }: Props) {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -132,17 +130,9 @@ export function Posts({ posts, likes }: Props) {
                     {post.description}
                   </span>
                 </Link>
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs text-neutral-500">
-                    {post.created_at}
-                  </span>
-                  {likes[post.slug] > 0 && (
-                    <span className="flex items-center gap-0.5 font-mono text-xs text-neutral-500">
-                      <BiLike size={14} />
-                      <div className="mt-1">{likes[post.slug]}</div>
-                    </span>
-                  )}
-                </div>
+                <span className="font-mono text-xs text-neutral-500">
+                  {post.created_at}
+                </span>
               </div>
             ))}
           </div>
