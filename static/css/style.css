@@ -70,6 +70,7 @@ a {
 
 .content-slot {
   flex: 1 1 auto;
+  padding-bottom: 4rem;
 }
 
 /* Nav */
