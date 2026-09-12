@@ -47,24 +47,36 @@ function resolve(urlPath) {
 
 if (!rebuild()) process.exit(1);
 
-http
-  .createServer((req, res) => {
-    const file = resolve(req.url || "/");
+const server = http.createServer((req, res) => {
+  const file = resolve(req.url || "/");
 
-    if (!file) {
-      const notFound = path.join(OUT, "404.html");
-      res.writeHead(404, { "content-type": "text/html; charset=utf-8" });
-      res.end(fs.existsSync(notFound) ? fs.readFileSync(notFound) : "Not found");
-      return;
-    }
+  if (!file) {
+    const notFound = path.join(OUT, "404.html");
+    res.writeHead(404, { "content-type": "text/html; charset=utf-8" });
+    res.end(fs.existsSync(notFound) ? fs.readFileSync(notFound) : "Not found");
+    return;
+  }
 
-    res.writeHead(200, {
-      "content-type": TYPES[path.extname(file).toLowerCase()] || "application/octet-stream",
-      "cache-control": "no-store",
-    });
-    fs.createReadStream(file).pipe(res);
-  })
-  .listen(PORT, () => console.log(`\n  http://localhost:${PORT}\n`));
+  res.writeHead(200, {
+    "content-type": TYPES[path.extname(file).toLowerCase()] || "application/octet-stream",
+    "cache-control": "no-store",
+  });
+  fs.createReadStream(file).pipe(res);
+});
+
+server.on("error", (error) => {
+  if (error.code === "EADDRINUSE") {
+    console.error(
+      `\n  Port ${PORT} is already in use.\n` +
+        `  Either stop whatever is on it, or pick another port:\n\n` +
+        `      PORT=${PORT + 1} npm run dev\n`
+    );
+    process.exit(1);
+  }
+  throw error;
+});
+
+server.listen(PORT, () => console.log(`\n  http://localhost:${PORT}\n`));
 
 /* Rebuild when sources change. Debounced — editors fire several events per save. */
 let timer;
