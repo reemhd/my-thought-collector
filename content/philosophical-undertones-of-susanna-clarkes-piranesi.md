@@ -1,13 +1,10 @@
-export const metadata = {
-  "title": "Philosophical Undertones of Susanna Clarke's Piranesi",
-  "created_at": "19 Oct 2025",
-  "tags": [
-    "Philosophy"
-  ],
-  "description": "Piranesi's House is more than a labyrinth, it's a model of the mind, perception, and the limits of what we can know.",
-  "image": "/piranesi.png"
-};
-
+---
+title: "Philosophical Undertones of Susanna Clarke's Piranesi"
+date: "19 Oct 2025"
+description: "Piranesi's House is more than a labyrinth, it's a model of the mind, perception, and the limits of what we can know."
+image: "/piranesi.png"
+tags: ["Philosophy"]
+---
 ![piranesi](/piranesi.png)
 
 ⚠️ Contains spoilers ⚠️

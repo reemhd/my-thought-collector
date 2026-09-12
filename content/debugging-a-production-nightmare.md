@@ -1,11 +1,10 @@
-export const metadata = {
-  created_at: "19 Mar 2025",
-  title: "Debugging a Production Nightmare",
-  tags: ["Technical"],
-  description: "I added one question to a hardcoded array and broke an unrelated part of production the next day. The culprit: shared mutable state silently leaking across module boundaries.",
-  image: "/ghost.png"
-};
-
+---
+title: "Debugging a Production Nightmare"
+date: "19 Mar 2025"
+description: "I added one question to a hardcoded array and broke an unrelated part of production the next day. The culprit: shared mutable state silently leaking across module boundaries."
+image: "/ghost.png"
+tags: ["Technical"]
+---
 I was assigned a seemingly simple task that spiralled into a production issue affecting unrelated parts of the system. What followed was a valuable (and painful) lesson in system design, JavaScript quirks, and the risks of shared mutable state in a monolithic architecture.
 
 ## The setup

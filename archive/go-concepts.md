@@ -1,13 +1,10 @@
-export const metadata = {
-  "title": "Go Concepts",
-  "created_at": "19 Apr 2025",
-  "tags": [
-    "Technical"
-  ],
-  description: "Notes on 5 Go concepts: interfaces, goroutines, channels, context, and JSON marshaling; with working examples for each.",
-  image: "/go.png"
-};
-
+---
+title: "Go Concepts"
+date: "19 Apr 2025"
+description: "Notes on 5 Go concepts: interfaces, goroutines, channels, context, and JSON marshaling; with working examples for each."
+image: "/go.png"
+tags: ["Technical"]
+---
 ## Interface
 
 An [interface](https://gobyexample.com/interfaces) in go defines a set of method signatures. If a type implements all those methods, it satisfies the interface and no explicit declaration is needed.

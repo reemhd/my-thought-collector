@@ -1,13 +1,10 @@
-export const metadata = {
-  "title": "The Birth of Digital Consciousness: Reading Greg Egan's Diaspora",
-  "created_at": "26 Aug 2025",
-  "tags": [
-    "Philosophy"
-  ],
-  "description": "Greg Egan renders consciousness as code, and makes it feel earned. Reflections on Diaspora's opening chapters: what it means for a mind to emerge, understand, and become a self.",
-  "image": "/gregan.jpg"
-};
-
+---
+title: "The Birth of Digital Consciousness: Reading Greg Egan's Diaspora"
+date: "26 Aug 2025"
+description: "Greg Egan renders consciousness as code, and makes it feel earned. Reflections on Diaspora's opening chapters: what it means for a mind to emerge, understand, and become a self."
+image: "/gregan.jpg"
+tags: ["Philosophy"]
+---
 ![gregan](/gregan.jpg)
 
 Diaspora is a hard sci-fi read that imagines a post-human future where digital consciousness exists. This piece only reflects on the opening chapters that resonated with me most about the evolution of consciousness.

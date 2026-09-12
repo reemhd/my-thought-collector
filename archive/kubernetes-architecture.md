@@ -1,13 +1,10 @@
-export const metadata = {
-  "title": "Kubernetes Architecture",
-  "created_at": "19 Sept 2025",
-  "tags": [
-    "Technical"
-  ],
-  "description": "A breakdown of Kubernetes architecture: control plane, worker nodes, networking, and storage. Covering how the pieces fit together and why each component exists.",
-  "image": "/k8s.png"
-};
-
+---
+title: "Kubernetes Architecture"
+date: "19 Sept 2025"
+description: "A breakdown of Kubernetes architecture: control plane, worker nodes, networking, and storage. Covering how the pieces fit together and why each component exists."
+image: "/k8s.png"
+tags: ["Technical"]
+---
 ![K8s](/k8s.png)
 
 ## Introduction

@@ -1,13 +1,10 @@
-export const metadata = {
-  "title": "AWS RDS Subnet Migration",
-  "created_at": "5 May 2025",
-  "tags": [
-    "Technical"
-  ],
-  "description": "Moving a live RDS instance from public to private subnets sounds like it requires a full rebuild, it doesn't. Here's how to do it with minimal downtime using Multi-AZ failover.",
-  "image": "/aws.png"
-};
-
+---
+title: "AWS RDS Subnet Migration"
+date: "5 May 2025"
+description: "Moving a live RDS instance from public to private subnets sounds like it requires a full rebuild, it doesn't. Here's how to do it with minimal downtime using Multi-AZ failover."
+image: "/aws.png"
+tags: ["Technical"]
+---
 ## Overview
 
 I'll walk through how to migrate AWS RDS instances from public subnets to private subnets within the same VPC without recreating the database. The method minimises downtime beyond a controlled failover using built-in AWS functionality.

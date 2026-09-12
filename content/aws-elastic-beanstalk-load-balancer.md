@@ -1,11 +1,10 @@
-export const metadata = {
-  created_at: "2 Apr 2025",
-  title: "AWS Elastic Beanstalk Load Balancer",
-  tags: ["Technical"],
-  description: "A platform upgrade silently broke TLS for certain clients showing no logs, no errors, no trace. Here's why Elastic Beanstalk's \"all green\" status can hide infrastructure-level failures.",
-  image: "/aws.png"
-};
-
+---
+title: "AWS Elastic Beanstalk Load Balancer"
+date: "2 Apr 2025"
+description: "A platform upgrade silently broke TLS for certain clients showing no logs, no errors, no trace. Here's why Elastic Beanstalk's \"all green\" status can hide infrastructure-level failures."
+image: "/aws.png"
+tags: ["Technical"]
+---
 When deploying applications on AWS Elastic Beanstalk (EB), you have two main options for handling load balancing: let Beanstalk manage it for you automatically, or manually configure your own Application Load Balancer (ALB) and hook it into your environment.
 
 ## Manual EC2 + ALB (Custom Infrastructure)
