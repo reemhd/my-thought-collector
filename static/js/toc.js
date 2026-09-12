@@ -8,27 +8,39 @@
     })
     .filter(Boolean);
 
+  if (!headings.length) return;
+
+  var OFFSET = 120;
+
   function setActive(id) {
     links.forEach(function (link) {
       link.classList.toggle("is-active", link.getAttribute("data-toc-target") === id);
     });
   }
 
-  if ("IntersectionObserver" in window) {
-    var observer = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            setActive(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: "-15% 0px -70% 0px", threshold: 0 }
-    );
-    headings.forEach(function (h) {
-      observer.observe(h);
+  function updateActive() {
+    var current = headings[0];
+    for (var i = 0; i < headings.length; i++) {
+      if (headings[i].getBoundingClientRect().top - OFFSET <= 0) {
+        current = headings[i];
+      } else {
+        break;
+      }
+    }
+    setActive(current.id);
+  }
+
+  var ticking = false;
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(function () {
+      updateActive();
+      ticking = false;
     });
   }
 
-  if (headings.length) setActive(headings[0].id);
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+  updateActive();
 })();
