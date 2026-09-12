@@ -1,0 +1,6 @@
+{
+  "buildCommand": "bash scripts/vercel-build.sh",
+  "outputDirectory": "public",
+  "cleanUrls": true,
+  "trailingSlash": false
+}

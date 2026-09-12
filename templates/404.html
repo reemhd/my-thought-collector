@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Reem/Not Found{% endblock title %}
+{% block description %}Lost?{% endblock description %}
+{% block og_image %}/404.png{% endblock og_image %}
+
+{% block content %}
+<div class="not-found">
+  <h1 class="not-found-title">404 - Page Not Found</h1>
+  <p class="not-found-text">You have wandered off the path. Follow the paw prints home.</p>
+  <a href="{{ config.base_url }}/" class="not-found-link">
+    <span class="paw paw-left">&#128062;</span>
+    <span class="paw paw-right">&#128062;</span>
+  </a>
+</div>
+{% endblock content %}

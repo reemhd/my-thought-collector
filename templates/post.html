@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Reem/{{ page.title }}{% endblock title %}
+{% block description %}{{ page.description }}{% endblock description %}
+{% block og_image %}{{ page.extra.image | default(value=config.extra.og_image) }}{% endblock og_image %}
+
+{% block content %}
+<article class="post-article">
+  <span class="post-article-title">{{ page.title }}</span>
+  <p class="post-article-date">{{ page.date | date(format="%-d %b %Y") }}</p>
+  <div class="prose">
+    {{ page.content | safe }}
+  </div>
+</article>
+
+{% include "partials/back_to_top.html" %}
+{% endblock content %}

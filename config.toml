@@ -1,0 +1,22 @@
+base_url = "https://reemdalvi.com"
+title = "Reem/"
+description = "Thought dumping ground"
+default_language = "en"
+
+compile_sass = false
+build_search_index = false
+generate_feeds = true
+feed_filenames = ["rss.xml"]
+
+taxonomies = [
+    { name = "tags", render = false },
+]
+
+[markdown]
+smart_punctuation = false
+
+[markdown.highlighting]
+theme = "one-dark-pro"
+
+[extra]
+og_image = "/hole.png"
