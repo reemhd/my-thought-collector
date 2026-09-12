@@ -19,8 +19,10 @@
       </a>
       <div class="post-meta">
         <span>{{ page.date | date(format="%-d %b") }}</span>
+        {% if tag %}
         <span class="dot">&middot;</span>
         <span>{{ tag }}</span>
+        {% endif %}
         <span class="dot">&middot;</span>
         <span>{{ page.reading_time }} min</span>
       </div>

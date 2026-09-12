@@ -4,6 +4,7 @@
 # misc
 .DS_Store
 *.pem
+.vscode/
 
 # env files
 .env*

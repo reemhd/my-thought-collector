@@ -2,7 +2,7 @@
 
 {% block title %}Reem/{{ page.title }}{% endblock title %}
 {% block description %}{{ page.description }}{% endblock description %}
-{% block og_image %}{{ page.extra.image | default(value=config.extra.og_image) }}{% endblock og_image %}
+{% block og_image %}{% if page.extra.image %}{{ page.extra.image }}{% else %}{{ config.extra.og_image }}{% endif %}{% endblock og_image %}
 
 {% block content %}
 <div class="post-topbar">
@@ -13,7 +13,7 @@
 <div class="post-layout">
   <article class="post-article">
     <div class="post-kicker">
-      <span class="post-category">{{ page.taxonomies.tags | first }}</span>
+      {% if page.taxonomies.tags %}<span class="post-category">{{ page.taxonomies.tags | first }}</span>{% endif %}
       <span class="post-article-date">{{ page.date | date(format="%-d %b %Y") }}</span>
     </div>
     <h1 class="post-article-title">{{ page.title }}</h1>
