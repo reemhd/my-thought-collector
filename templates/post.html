@@ -5,13 +5,52 @@
 {% block og_image %}{{ page.extra.image | default(value=config.extra.og_image) }}{% endblock og_image %}
 
 {% block content %}
-<article class="post-article">
-  <span class="post-article-title">{{ page.title }}</span>
-  <p class="post-article-date">{{ page.date | date(format="%-d %b %Y") }}</p>
-  <div class="prose">
-    {{ page.content | safe }}
-  </div>
-</article>
+<div class="post-topbar">
+  <a href="{{ config.base_url }}/" class="topbar-link">&larr; Index</a>
+  <span class="topbar-meta">{{ page.reading_time }} min</span>
+</div>
+
+<div class="post-layout">
+  <article class="post-article">
+    <div class="post-kicker">
+      <span class="post-category">{{ page.taxonomies.tags | first }}</span>
+      <span class="post-article-date">{{ page.date | date(format="%-d %b %Y") }}</span>
+    </div>
+    <h1 class="post-article-title">{{ page.title }}</h1>
+    {% if page.description %}
+    <p class="post-article-desc">{{ page.description }}</p>
+    {% endif %}
+
+    <div class="prose">
+      {{ page.content | safe }}
+    </div>
+  </article>
+
+  {% if page.toc %}
+  <aside class="toc">
+    <div class="toc-label">Sections</div>
+    <ol class="toc-list">
+      {% for h in page.toc %}
+      <li>
+        <a href="#{{ h.id }}" class="toc-link" data-toc-target="{{ h.id }}">
+          <span class="toc-num">{% if loop.index < 10 %}0{{ loop.index }}{% else %}{{ loop.index }}{% endif %}</span>
+          <span class="toc-title">{{ h.title }}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ol>
+  </aside>
+  {% endif %}
+</div>
+
+<div class="post-footer-bar">
+  <a href="{{ config.base_url }}/" class="topbar-link">&larr; all entries</a>
+  <span class="post-footer-author">Reem Dalvi</span>
+</div>
 
 {% include "partials/back_to_top.html" %}
 {% endblock content %}
+
+{% block extra_js %}
+<script src="/js/toc.js" defer></script>
+{% endblock extra_js %}

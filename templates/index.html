@@ -2,40 +2,31 @@
 
 {% block content %}
 {% set section = get_section(path="posts/_index.md") %}
-{% set tag_taxonomy = get_taxonomy(kind="tags") %}
 
 <section class="posts-page">
-  <div class="filter-row">
-    <div class="filter-dropdown" id="filter-dropdown">
-      <button class="filter-btn" id="filter-btn" type="button" aria-label="Filter by tag">filter</button>
-      <div class="filter-menu" id="filter-menu" hidden>
-        <button class="filter-option is-active" type="button" data-tag="">all</button>
-        {% for term in tag_taxonomy.items %}
-        <button class="filter-option" type="button" data-tag="{{ term.name }}">{{ term.name }}</button>
-        {% endfor %}
-      </div>
-    </div>
-  </div>
-
   {% set_global current_group_year = "" %}
   {% for page in section.pages %}
     {% set year = page.date | date(format="%Y") %}
     {% if year != current_group_year %}
       {% set_global current_group_year = year %}
-      <div class="year-header" data-year="{{ year }}">{{ year }}</div>
+      <div class="year-header">{{ year }}</div>
     {% endif %}
     {% set tag = page.taxonomies.tags | first %}
-    <div class="post-item" data-tags="{{ tag }}" data-year="{{ year }}">
-      <span class="tag-badge tag-{{ tag | lower }}">{{ tag }}</span>
+    <div class="post-item">
       <a href="{{ page.permalink }}" class="post-link">
         <span class="post-title">{{ page.title }}</span>
-        <span class="post-desc">{{ page.description }}</span>
+        {% if page.description %}<span class="post-desc">{{ page.description }}</span>{% endif %}
       </a>
-      <span class="post-date">{{ page.date | date(format="%-d %b %Y") }}</span>
+      <div class="post-meta">
+        <span>{{ page.date | date(format="%-d %b") }}</span>
+        <span class="dot">&middot;</span>
+        <span>{{ tag }}</span>
+        <span class="dot">&middot;</span>
+        <span>{{ page.reading_time }} min</span>
+      </div>
     </div>
   {% endfor %}
 </section>
 
 {% include "partials/back_to_top.html" %}
-<script src="/js/filter.js" defer></script>
 {% endblock content %}
