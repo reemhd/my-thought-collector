@@ -1,6 +1,6 @@
 :root {
   --background: #111111;
-  --foreground: #ededed;
+  --foreground: #c9c9c9;
   --gray-300: #d4d4d4;
   --gray-400: #a3a3a3;
   --gray-500: #737373;
@@ -113,24 +113,6 @@ a {
   color: var(--accent);
 }
 
-/* Footer */
-.site-footer {
-  margin: 3rem 0 2rem;
-  max-width: var(--content-max);
-  border-top: 1px solid var(--neutral-700);
-  padding-top: 1.5rem;
-}
-
-.footer-text {
-  margin: 0;
-  font-size: 0.875rem;
-  color: var(--gray-400);
-}
-
-.footer-text strong {
-  color: var(--gray-300);
-}
-
 /* Posts list */
 .posts-page {
   margin-top: 0;
@@ -155,6 +137,11 @@ a {
   padding: 1.5rem 0;
 }
 
+.post-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
 .post-link {
   display: flex;
   flex-direction: column;
@@ -162,7 +149,7 @@ a {
 
 .post-title {
   font-family: "Instrument Sans", sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 1.6rem;
   color: var(--foreground);
   letter-spacing: -0.01em;
@@ -271,7 +258,7 @@ a {
 
 .post-article-title {
   font-family: "Instrument Sans", sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   font-size: clamp(1.75rem, 4vw, 2.5rem);
   line-height: 1.2;
   color: var(--foreground);
@@ -360,7 +347,7 @@ a {
 .prose h1, .prose h2, .prose h3, .prose h4 {
   color: var(--foreground);
   font-family: "Instrument Sans", sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: -0.01em;
   margin-top: 2.25rem;
   margin-bottom: 1rem;
