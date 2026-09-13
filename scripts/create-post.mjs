@@ -27,7 +27,7 @@ const slug = slugify(title);
 const date = getIsoDate();
 
 const frontMatter = `+++
-title = "${title.replace(/"/g, '\\"')}"
+title = "${title.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"
 date = ${date}
 description = ""
 
